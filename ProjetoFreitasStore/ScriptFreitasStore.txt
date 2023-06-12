@@ -1,0 +1,78 @@
+create table usuario(
+	id_usuario serial,
+	nome_usuario varchar(50) not null,
+	login_usuario varchar(50) not null,
+	senha_usuario varchar(100) not null,
+	tipo_usuario smallint not null,
+	data_usuario date not null,
+	cpf_usuario varchar(11) not null,
+	cep_usuario varchar(8) not null,
+	estado_usuario smallint not null,
+	cidade_usuario varchar(50) not null,
+	rua_usuario varchar(50) not null,
+	numero_usuario smallint not null,
+	bairro_usuario varchar(50) not null,
+	constraint usuario_pkey primary key (id_usuario),
+	constraint usuario_cpf_key unique (cpf_usuario),
+	constraint usuario_login_key unique (login_usuario)
+);
+
+create table telefone_usuario (
+	id_usuario integer not null,
+	telefone_usuario varchar(12) not null,
+	constraint telefone_usuario_pkey primary key (telefone_usuario),
+	constraint usuario_fk foreign key (id_usuario) references usuario (id_usuario)
+);
+
+create table fornecedor(
+	id_fornecedor serial,
+	nome_fornecedor varchar(50) not null,
+	descricao_fornecedor varchar(50) not null,
+	cnpj_fornecedor varchar(14) not null,
+	data_fornecedor date not null,
+	cep_fornecedor varchar(8) not null,
+	estado_fornecedor smallint not null,
+	cidade_fornecedor varchar(50) not null,
+	rua_fornecedor varchar(50) not null,
+	numero_fornecedor smallint not null,
+	bairro_fornecedor varchar(50) not null,
+	constraint fornecedor_pkey primary key (id_fornecedor)
+);
+
+create table telefone_fornecedor (
+	id_fornecedor integer not null,
+	telefone_fornecedor varchar(12) not null,
+	constraint telefone_fornecedor_pkey primary key (telefone_fornecedor),
+	constraint fornecedor_fk foreign key (id_fornecedor) references fornecedor (id_fornecedor)
+);
+
+create table roupas(
+	id_roupas serial,
+	descricao_roupas varchar(50) not null,
+	cor_roupas smallint not null,
+	tamanho_roupas smallint not null,
+	preco_custo_roupas double precision not null,
+	preco_venda_roupas double precision not null,
+	data_roupas date not null,
+	id_fornecedor integer not null,
+	constraint roupas_pkey primary key (id_roupas),
+	constraint fornecedor_fk foreign key (id_fornecedor) references fornecedor (id_fornecedor)
+);
+
+create table venda(
+	id_venda serial,
+	data_venda date not null,
+	valor_venda double precision not null,
+	id_usuario integer not null,
+	constraint venda_pkey primary key (id_venda),
+	constraint usuario_fk foreign key (id_usuario) references usuario (id_usuario)
+);
+
+create table venda_roupas(
+	valor_roupas double precision not null,
+	quantidade_roupas smallint not null,
+	id_roupas integer not null,
+	id_venda integer not null,
+	constraint venda_fk foreign key (id_venda) references venda (id_venda),
+	constraint roupas_fk foreign key (id_roupas) references roupas (id_roupas)
+);
